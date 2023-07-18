@@ -1,2 +1,5 @@
 obj
 bin
+.vscode
+global.json
+section-2-to-do-list-csharp-net6.sln
