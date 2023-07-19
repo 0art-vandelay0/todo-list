@@ -7,6 +7,10 @@ namespace ToDoList.Controllers
 {
     public class CategoriesController : Controller
     {
-
+        [HttpGet("/categories/new")]
+        public ActionResult New()
+        {
+            return View();
+        }
     }
 }
