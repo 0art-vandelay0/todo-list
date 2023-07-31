@@ -19,8 +19,8 @@ namespace ToDoList.Controllers
         public ActionResult Index()
         {
             List<Item> model = _db.Items
-                                .Include(item => item.Category)
-                                .ToList();
+                .Include(item => item.Category)
+                .ToList();
             return View(model);
         }
 
@@ -45,8 +45,10 @@ namespace ToDoList.Controllers
         public ActionResult Details(int id)
         {
             Item thisItem = _db.Items
-                                .Include(item => item.Category)
-                                .FirstOrDefault(item => item.ItemId == id);
+                .Include(item => item.Category)
+                .Include(item => item.JoinEntities)
+                .ThenInclude(join => join.Tag)
+                .FirstOrDefault(item => item.ItemId == id);
             return View(thisItem);
         }
 
@@ -76,6 +78,15 @@ namespace ToDoList.Controllers
         {
             Item thisItem = _db.Items.FirstOrDefault(item => item.ItemId == id);
             _db.Items.Remove(thisItem);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteJoin(int joinId)
+        {
+            ItemTag joinEntry = _db.ItemTags.FirstOrDefault(entry => entry.ItemTagId == joinId);
+            _db.ItemTags.Remove(joinEntry);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
